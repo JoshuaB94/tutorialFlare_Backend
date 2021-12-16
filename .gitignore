@@ -105,3 +105,6 @@ dist
 
 # Environment Setup
 config/
+
+# Config File(s)
+config/default.json
