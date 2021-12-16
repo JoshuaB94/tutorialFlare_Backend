@@ -91,11 +91,11 @@ router.delete("/:userId", [auth, admin], async (req, res) => {
 });
 
 //* GET to Logout a User
-router.get('/logout', auth, function(req, res) {
-  req.user.deleteToken(req.token,(err, user)=>{
-    if(err) return res.status(400).send(err);
-    res.sendStatus(200);
-  });
-});
+// router.get('/logout', auth, function(req, res) {
+//   req.user.deleteToken(req.token,(err, user)=>{
+//     if(err) return res.status(400).send(err);
+//     res.sendStatus(200);
+//   });
+// });
 
 module.exports = router;
