@@ -40,6 +40,7 @@ router.post("/register", async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
+
 //* POST a valid login attempt
 //! when a user logs in, a new JWT token is generated and sent if their email/password credentials are correct
 router.post("/login", async (req, res) => {
@@ -87,6 +88,14 @@ router.delete("/:userId", [auth, admin], async (req, res) => {
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
+});
+
+//* GET to Logout a User
+router.get('/logout', auth, function(req, res) {
+  req.user.deleteToken(req.token,(err, user)=>{
+    if(err) return res.status(400).send(err);
+    res.sendStatus(200);
+  });
 });
 
 module.exports = router;
