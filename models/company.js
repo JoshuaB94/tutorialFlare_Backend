@@ -12,7 +12,7 @@ const companySchema = mongoose.Schema({
     minLength: 2,
     maxLength: 255,
   },
-  password: { type: String, required: true, minLength: 8, maxLength: 20 },
+  password: { type: String, required: true, minLength: 8, maxLength: 2046 },
   isAdmin: { type: Boolean, required: true },
 });
 
@@ -30,9 +30,9 @@ companySchema.methods.generateAuthToken = function () {
 
 const validateCompany = (company) => {
   const schema = Joi.object({
-    comapny: Joi.string().min(5).max(50).required(),
+    company: Joi.string().min(5).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
-    password: Joi.string().min(8).max(20).required(),
+    password: Joi.string().min(8).max(2046).required(),
     isAdmin: Joi.bool().required(),
   });
   return schema.validate(company);
@@ -41,7 +41,7 @@ const validateCompany = (company) => {
 const validateLogin = (req) => {
   const schema = Joi.object({
     email: Joi.string().min(5).max(255).required().email(),
-    password: Joi.string().min(8).max(20).required(),
+    password: Joi.string().min(8).max(2046).required(),
   });
   return schema.validate(req);
 };

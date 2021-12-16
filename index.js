@@ -1,5 +1,5 @@
 const connectDb = require("./db/db");
-const usersRouter = require("./routes/users");
+const companiesRouter = require("./routes/companies");
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -14,7 +14,7 @@ connectDb();
 
 app.use(cors());
 app.use(express.json());
-app.use(`/api/users`, usersRouter);
+app.use(`/api/company`, companiesRouter);
 
 const port = process.env.PORT || 3200;
 app.listen(port, () => {
