@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+const {companyProfileSchema} = require("./companyprofile");
 
 const companySchema = mongoose.Schema({
   company: { type: String, required: true, minLength: 5, maxLength: 50 },
@@ -14,6 +15,7 @@ const companySchema = mongoose.Schema({
   },
   password: { type: String, required: true, minLength: 8, maxLength: 2046 },
   isAdmin: { type: Boolean, required: true },
+  profile: {type: [companyProfileSchema], default: []}
 });
 
 companySchema.methods.generateAuthToken = function () {
