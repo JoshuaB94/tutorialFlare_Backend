@@ -1,5 +1,6 @@
 const connectDb = require("./db/db");
 const companiesRouter = require("./routes/companies");
+const videoCreatorsRouter = require("./routes/videocreators");
 const express = require("express");
 const cors = require("cors");
 const app = express();
@@ -15,6 +16,7 @@ connectDb();
 app.use(cors());
 app.use(express.json());
 app.use(`/api/company`, companiesRouter);
+app.use(`/api/video-creator`, videoCreatorsRouter);
 
 const port = process.env.PORT || 3200;
 app.listen(port, () => {

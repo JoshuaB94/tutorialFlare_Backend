@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
 
-//* POST register a new user
+//* POST register a new company
 router.post("/register", async (req, res) => {
   try {
     const { error } = validateCompany(req.body);
@@ -65,7 +65,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-//* Get all users
+//* Get all companies
 router.get("/", async (req, res) => {
   try {
     const company = await Company.find();
@@ -75,7 +75,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-//* DELETE a single user from the database
+//* DELETE a single company from the database
 router.delete("/:companyId", async (req, res) => {
   try {
     const company = await Company.findById(req.params.companyId);
