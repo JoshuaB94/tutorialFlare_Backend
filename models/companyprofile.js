@@ -11,8 +11,9 @@ const companyProfileSchema = new mongoose.Schema(
 
 const validateCompanyProfile = (companyprofile) => {
     const schema = Joi.object({
-        companyMission: Joi.string().min(164).max(50).required(),
-        companyBio: Joi.string().min(5).max(255).required(),
+        companyName: Joi.string().min(0).max(50).required(),
+        companyMission: Joi.string().min(164).max(250).required(),
+        companyBio: Joi.string().min(0).max(1500).required(),
         companyWebsite: Joi.string().min(8).max(2046).required()
     });
     return schema.validate(companyprofile);

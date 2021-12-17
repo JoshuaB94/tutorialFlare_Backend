@@ -1,5 +1,5 @@
 const { Company, validateLogin, validateCompany } = require("../models/company");
-
+const { CompanyProfile, validateCompanyProfile } = require("../models/companyprofile");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
@@ -85,6 +85,29 @@ router.delete("/:companyId", async (req, res) => {
         .send(`Company with id ${req.params.companyId} does not exist!`);
     await company.remove();
     return res.send(company);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+//* POST setup a new company profile
+router.post("/profile-setup", async (req, res) => {
+  try {
+    const { error } = validateCompanyProfile(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let companyprofile = await CompanyProfile.findOne({ companyName: req.body.companyName });
+    if (companyprofile)
+      return res.status(400).send(`Company Profile Already Exists`);
+
+    companyprofile = new CompanyProfile({
+      companyName: req.body.companyName,
+      companyMission: req.body.companyMission,
+      companyBio: req.body.companyBio,
+      companyWebsite: req.body.companyWebsite
+    });
+
+    await companyprofile.save();
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
