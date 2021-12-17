@@ -76,7 +76,7 @@ router.get("/", async (req, res) => {
 });
 
 //* DELETE a single user from the database
-router.delete("/:companyId", [auth, admin], async (req, res) => {
+router.delete("/:companyId", async (req, res) => {
   try {
     const company = await Company.findById(req.params.companyId);
     if (!company)
