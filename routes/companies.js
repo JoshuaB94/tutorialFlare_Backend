@@ -1,8 +1,8 @@
 const { Company, validateLogin, validateCompany } = require("../models/company");
 const { CompanyProfile, validateCompanyProfile } = require("../models/companyprofile");
+
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
-
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();

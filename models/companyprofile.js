@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
-// const config = require("config");
 
 const companyProfileSchema = new mongoose.Schema(
     {
@@ -15,7 +14,7 @@ const validateCompanyProfile = (companyprofile) => {
         companyName: Joi.string().min(0).max(50).required(),
         companyMission: Joi.string().min(0).max(250).required(),
         companyBio: Joi.string().min(0).max(1500).required(),
-        companyWebsite: Joi.string().min(8).max(2046).required()
+        companyWebsite: Joi.string().required()
     });
     return schema.validate(companyprofile);
 };

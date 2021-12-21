@@ -1,8 +1,8 @@
 const { videoCreator, validateLogin, validateVideoCreator } = require("../models/videocreator");
+const { videoCreatorProfileSchema, validateVideoCreatorProfile, VideoCreatorProfile }  = require("../models/videocreatorprofile");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
-
 const bcrypt = require("bcryptjs");
 const express = require("express");
 const router = express.Router();
@@ -85,6 +85,36 @@ router.delete("/:creatorId", async (req, res) => {
         .send(`Video Creator with id ${req.params.creatorId} does not exist!`);
     await videocreator.remove();
     return res.send(videocreator);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+  
+});
+
+//* POST setup a new video creator profile
+router.post("/profile-setup", async (req, res) => {
+  try {
+    const { error } = validateVideoCreatorProfile(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let videocreatorprofile = await VideoCreatorProfile.findOne({ videoCreatorName: req.body.videoCreatorName });
+    if (videocreatorprofile)
+      return res.status(400).send(`Video Creator Profile Already Exists`);
+
+    videocreatorprofile = new VideoCreatorProfile({
+      videoCreatorName: req.body.videoCreatorName,
+      videoCreatorLocation: req.body.videoCreatorLocation,
+      videoCreatorSkills: req.body.videoCreatorSkills,
+      videoCreatorSocialLinks: req.body.videoCreatorSocialLinks
+    });
+
+    await videocreatorprofile.save();
+    return res.send({
+      videoCreatorName: videocreatorprofile.videoCreatorName,
+      videoCreatorLocation: videocreatorprofile.videoCreatorLocation,
+      videoCreatorSkills: videocreatorprofile.videoCreatorSkills,
+      videoCreatorSocialLinks: videocreatorprofile.videoCreatorSocialLinks
+    });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
