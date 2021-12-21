@@ -18,7 +18,7 @@ const validateVideoCreatorProfile = (videocreatorprofile) => {
     return schema.validate(videocreatorprofile);
 };
 
-const VideoCreatorProfile = mongoose.model("VideoCreatorProfile", companyProfileSchema);
+const VideoCreatorProfile = mongoose.model("VideoCreatorProfile", videoCreatorProfileSchema);
 module.exports.VideoCreatorProfile = VideoCreatorProfile;
 module.exports.videoCreatorProfileSchema = videoCreatorProfileSchema;
 module.exports.validateVideoCreatorProfile = validateVideoCreatorProfile;
