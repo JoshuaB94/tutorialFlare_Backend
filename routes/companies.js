@@ -108,6 +108,12 @@ router.post("/profile-setup", async (req, res) => {
     });
 
     await companyprofile.save();
+    return res.send({
+      companyName: companyprofile.companyName,
+      companyMission: companyprofile.companyMission,
+      companyBio: companyprofile.companyBio,
+      companyWebsite: companyprofile.companyWebsite
+    });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
