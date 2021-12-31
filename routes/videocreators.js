@@ -104,16 +104,16 @@ router.post("/profile-setup", async (req, res) => {
     videocreatorprofile = new VideoCreatorProfile({
       videoCreatorName: req.body.videoCreatorName,
       videoCreatorLocation: req.body.videoCreatorLocation,
-      videoCreatorSkills: req.body.videoCreatorSkills,
-      videoCreatorSocialLinks: req.body.videoCreatorSocialLinks
+      videoCreatorSkill: req.body.videoCreatorSkill,
+      videoCreatorSocialLink: req.body.videoCreatorSocialLink
     });
 
     await videocreatorprofile.save();
     return res.send({
       videoCreatorName: videocreatorprofile.videoCreatorName,
       videoCreatorLocation: videocreatorprofile.videoCreatorLocation,
-      videoCreatorSkills: videocreatorprofile.videoCreatorSkills,
-      videoCreatorSocialLinks: videocreatorprofile.videoCreatorSocialLinks
+      videoCreatorSkill: videocreatorprofile.videoCreatorSkill,
+      videoCreatorSocialLink: videocreatorprofile.videoCreatorSocialLink
     });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
