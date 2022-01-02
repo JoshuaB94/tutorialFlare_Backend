@@ -75,20 +75,20 @@ router.get("/", async (req, res) => {
   }
 });
 
+
 //* DELETE a single video creator from the database
-router.delete("/:creatorId", async (req, res) => {
+router.delete("/_id", async (req, res) => {
   try {
-    const videocreator = await videoCreator.findById(req.params.creatorId);
+    const videocreator = await videoCreator.findById(req.body._id);
     if (!videocreator)
       return res
         .status(400)
-        .send(`Video Creator with id ${req.params.creatorId} does not exist!`);
+        .send(`Video Creator with id ${req.body._id} does not exist!`);
     await videocreator.remove();
     return res.send(videocreator);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
-  
 });
 
 //* POST setup a new video creator profile
@@ -140,6 +140,16 @@ router.post("/profile-setup", async (req, res) => {
 router.get("/profile", async (req, res) => {
   try {
     const videocreatorprofile = await VideoCreatorProfile.find();
+    return res.send(videocreatorprofile);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+//* Get a video creator profile by id
+router.get("/profile/:_id", async (req, res) => {
+  try {
+    const videocreatorprofile = await VideoCreatorProfile.findById(req.params._id);
     return res.send(videocreatorprofile);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
