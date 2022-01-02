@@ -96,24 +96,34 @@ router.post("/profile-setup", async (req, res) => {
     const { error } = validateCompanyProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let companyprofile = await CompanyProfile.findOne({ companyName: req.body.companyName });
+    let companyprofile = await CompanyProfile.findOne({ CompanyName: req.body.CompanyName });
     if (companyprofile)
       return res.status(400).send(`Company Profile Already Exists`);
 
     companyprofile = new CompanyProfile({
-      companyName: req.body.companyName,
-      companyMission: req.body.companyMission,
-      companyBio: req.body.companyBio,
-      companyWebsite: req.body.companyWebsite
+      CompanyName: req.body.CompanyName,
+      Mission: req.body.Mission,
+      Bio: req.body.Bio,
+      Website: req.body.Website
     });
 
     await companyprofile.save();
     return res.send({
-      companyName: companyprofile.companyName,
-      companyMission: companyprofile.companyMission,
-      companyBio: companyprofile.companyBio,
-      companyWebsite: companyprofile.companyWebsite
+      CompanyName: companyprofile.CompanyName,
+      Mission: companyprofile.Mission,
+      Bio: companyprofile.Bio,
+      Website: companyprofile.Website
     });
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
+//* GET all company profiles
+router.get("/profile", async (req, res) => {
+  try {
+    const companyprofile = await CompanyProfile.find();
+    return res.send(companyprofile);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }

@@ -1,5 +1,5 @@
 const { videoCreator, validateLogin, validateVideoCreator } = require("../models/videocreator");
-const { videoCreatorProfileSchema, validateVideoCreatorProfile, VideoCreatorProfile }  = require("../models/videocreatorprofile");
+const { validateVideoCreatorProfile, VideoCreatorProfile }  = require("../models/videocreatorprofile");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");

@@ -14,8 +14,7 @@ const companySchema = mongoose.Schema({
     maxLength: 255,
   },
   password: { type: String, required: true, minLength: 8, maxLength: 2046 },
-  isAdmin: { type: Boolean, required: true },
-  profile: {type: [companyProfileSchema], default: []}
+  isAdmin: { type: Boolean, required: true }
 });
 
 companySchema.methods.generateAuthToken = function () {

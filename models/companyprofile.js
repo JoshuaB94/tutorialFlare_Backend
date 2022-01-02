@@ -3,18 +3,18 @@ const Joi = require("joi");
 
 const companyProfileSchema = new mongoose.Schema(
     {
-        companyName: {type: String, required: true, minLength: 0, maxLength: 50},
-        companyMission: {type: String, required: true, minLength: 0, maxLength: 250},
-        companyBio: {type: String, required: true, minLength: 0, maxLength: 1500},
-        companyWebsite: {type: String, required: false}
+        CompanyName: {type: String, required: true, minLength: 0, maxLength: 250},
+        Mission: {type: String, required: true, minLength: 0, maxLength: 1500},
+        Bio: {type: String, required: true, minLength: 0, maxLength: 1500},
+        Website: {type: String, required: false}
     });
 
 const validateCompanyProfile = (companyprofile) => {
     const schema = Joi.object({
-        companyName: Joi.string().min(0).max(50).required(),
-        companyMission: Joi.string().min(0).max(250).required(),
-        companyBio: Joi.string().min(0).max(1500).required(),
-        companyWebsite: Joi.string().required()
+        CompanyName: Joi.string().min(0).max(250).required(),
+        Mission: Joi.string().min(0).max(1500).required(),
+        Bio: Joi.string().min(0).max(1500).required(),
+        Website: Joi.string().required()
     });
     return schema.validate(companyprofile);
 };
