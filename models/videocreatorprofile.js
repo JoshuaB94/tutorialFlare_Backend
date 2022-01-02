@@ -2,18 +2,30 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 
 const videoCreatorProfileSchema = new mongoose.Schema({
-    videoCreatorName: {type: String, required: true, minLength: 0, maxLength: 50},
-    videoCreatorLocation: {type: String, required: false, minLength: 0, maxLength: 250},
-    videoCreatorSkill: {type: String, required: true, minLength: 0, maxLength: 1500},
-    videoCreatorSocialLink: {type: String, required: false}
+    Name: {type: String, required: true, minLength: 0, maxLength: 50},
+    Location: {type: String, required: false, minLength: 0, maxLength: 250},
+    Skills: {
+       skillOne: {type: String, required: true, minLength: 0, maxLength: 1500},
+       skillTwo: {type: String, required: true, minLength: 0, maxLength: 1500},
+       skillThree: {type: String, required: true, minLength: 0, maxLength: 1500}
+    },
+    SocialLinks: {
+        Youtube: {type: String, required: false},
+        Twitter: {type: String, required: false},
+        emailAddress: {type: String, required: false}
+    }
 });
 
 const validateVideoCreatorProfile = (videocreatorprofile) => {
     const schema = Joi.object({
-        videoCreatorName: Joi.string().min(0).max(50).required(),
-        videoCreatorLocation: Joi.string().min(0).max(250).required(),
-        videoCreatorSkill: Joi.string().min(0).max(1500).required(),
-        videoCreatorSocialLink: Joi.string().required()
+        Name: Joi.string().min(0).max(50).required(),
+        Location: Joi.string().min(0).max(250).required(),
+        skillOne: Joi.string().min(0).max(1500).required(),
+        skillTwo: Joi.string().min(0).max(1500).required(),
+        skillThree: Joi.string().min(0).max(1500).required(),
+        Youtube: Joi.string().required(),
+        Twitter: Joi.string().required(),
+        emailAddress: Joi.string().required()
     });
     return schema.validate(videocreatorprofile);
 };

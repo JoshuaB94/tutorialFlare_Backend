@@ -97,23 +97,39 @@ router.post("/profile-setup", async (req, res) => {
     const { error } = validateVideoCreatorProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let videocreatorprofile = await VideoCreatorProfile.findOne({ videoCreatorName: req.body.videoCreatorName });
+    let videocreatorprofile = await VideoCreatorProfile.findOne({ Name: req.body.Name });
     if (videocreatorprofile)
       return res.status(400).send(`Video Creator Profile Already Exists`);
 
     videocreatorprofile = new VideoCreatorProfile({
-      videoCreatorName: req.body.videoCreatorName,
-      videoCreatorLocation: req.body.videoCreatorLocation,
-      videoCreatorSkill: req.body.videoCreatorSkill,
-      videoCreatorSocialLink: req.body.videoCreatorSocialLink
+      Name: req.body.Name,
+      Location: req.body.Location,
+      Skills: {
+        skillOne: req.body.skillOne,
+        skillTwo: req.body.skillTwo,
+        skillThree: req.body.skillThree
+      },
+      SocialLinks: {
+        Youtube: req.body.Youtube,
+        Twitter: req.body.Twitter,
+        emailAddress: req.body.emailAddress
+      }
     });
 
     await videocreatorprofile.save();
     return res.send({
-      videoCreatorName: videocreatorprofile.videoCreatorName,
-      videoCreatorLocation: videocreatorprofile.videoCreatorLocation,
-      videoCreatorSkill: videocreatorprofile.videoCreatorSkill,
-      videoCreatorSocialLink: videocreatorprofile.videoCreatorSocialLink
+      Name: videocreatorprofile.Name,
+      Location: videocreatorprofile.Location,
+      Skills: {
+        skillOne: videocreatorprofile.skillOne,
+        skillTwo: videocreatorprofile.skillTwo,
+        skillThree: videocreatorprofile.skillThree
+      },
+      SocialLinks: {
+        Youtube: videocreatorprofile.Youtube,
+        Twitter: videocreatorprofile.Twitter,
+        emailAddress: videocreatorprofile.emailAddress
+      }
     });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
