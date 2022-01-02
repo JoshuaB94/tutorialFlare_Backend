@@ -120,4 +120,14 @@ router.post("/profile-setup", async (req, res) => {
   }
 });
 
+//* GET all video creator profiles
+router.get("/profile", async (req, res) => {
+  try {
+    const videocreatorprofile = await VideoCreatorProfile.find();
+    return res.send(videocreatorprofile);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
+
 module.exports = router;
