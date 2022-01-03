@@ -116,7 +116,8 @@ router.post("/profile-setup", async (req, res) => {
         Youtube: req.body.Youtube,
         Twitter: req.body.Twitter,
         emailAddress: req.body.emailAddress
-      }
+      },
+      Image: req.body.Image
     });
 
     await videocreatorprofile.save();
@@ -132,7 +133,8 @@ router.post("/profile-setup", async (req, res) => {
         Youtube: videocreatorprofile.Youtube,
         Twitter: videocreatorprofile.Twitter,
         emailAddress: videocreatorprofile.emailAddress
-      }
+      },
+      Image: req.body.Image
     });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
