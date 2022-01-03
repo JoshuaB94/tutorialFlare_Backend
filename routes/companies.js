@@ -76,13 +76,13 @@ router.get("/", async (req, res) => {
 });
 
 //* DELETE a single company from the database
-router.delete("/:companyId", async (req, res) => {
+router.delete("/:_id", async (req, res) => {
   try {
-    const company = await Company.findById(req.params.companyId);
+    const company = await Company.findById(req.params._id);
     if (!company)
       return res
         .status(400)
-        .send(`Company with id ${req.params.companyId} does not exist!`);
+        .send(`Company with id ${req.params._id} does not exist!`);
     await company.remove();
     return res.send(company);
   } catch (ex) {

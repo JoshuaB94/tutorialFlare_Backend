@@ -1,5 +1,6 @@
 const { videoCreator, validateLogin, validateVideoCreator } = require("../models/videocreator");
 const { validateVideoCreatorProfile, VideoCreatorProfile }  = require("../models/videocreatorprofile");
+const fileUpload = require("../middleware/file-upload");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
@@ -8,7 +9,7 @@ const express = require("express");
 const router = express.Router();
 
 //* POST register a new video creator
-router.post("/register", async (req, res) => {
+router.post("/register", fileUpload.single("image"), async (req, res) => {
   try {
     const { error } = validateVideoCreator(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -23,6 +24,7 @@ router.post("/register", async (req, res) => {
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, salt),
       isAdmin: req.body.isAdmin,
+      image: req.file.path
     });
 
     await videocreator.save();
@@ -35,6 +37,7 @@ router.post("/register", async (req, res) => {
         name: videocreator.name,
         email: videocreator.email,
         isAdmin: videocreator.isAdmin,
+        image: videocreator.image
       });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -77,13 +80,13 @@ router.get("/", async (req, res) => {
 
 
 //* DELETE a single video creator from the database
-router.delete("/_id", async (req, res) => {
+router.delete("/:_id", async (req, res) => {
   try {
-    const videocreator = await videoCreator.findById(req.body._id);
+    const videocreator = await videoCreator.findById(req.params._id);
     if (!videocreator)
       return res
         .status(400)
-        .send(`Video Creator with id ${req.body._id} does not exist!`);
+        .send(`Video Creator with id ${req.params._id} does not exist!`);
     await videocreator.remove();
     return res.send(videocreator);
   } catch (ex) {

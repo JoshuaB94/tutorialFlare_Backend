@@ -14,6 +14,7 @@ const videoCreatorSchema = mongoose.Schema({
   },
   password: { type: String, required: true, minLength: 8, maxLength: 2046 },
   isAdmin: { type: Boolean, required: true },
+  image: { type: String, default: ""}
 });
 
 videoCreatorSchema.methods.generateAuthToken = function () {
@@ -23,6 +24,7 @@ videoCreatorSchema.methods.generateAuthToken = function () {
       name: this.name,
       email: this.email,
       isAdmin: this.isAdmin,
+      image: this.image
     },
     config.get("JWT_SECRET")
   );
@@ -34,6 +36,7 @@ const validateVideoCreator = (videocreator) => {
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(8).max(2046).required(),
     isAdmin: Joi.bool().required(),
+    image: Joi.string()
   });
   return schema.validate(videocreator);
 };

@@ -3,8 +3,11 @@ const companiesRouter = require("./routes/companies");
 const videoCreatorsRouter = require("./routes/videocreators");
 const express = require("express");
 const cors = require("cors");
-const app = express();
 
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
 connectDb();
 
 
@@ -17,6 +20,20 @@ app.use(cors());
 app.use(express.json());
 app.use(`/api/company`, companiesRouter);
 app.use(`/api/video-creator`, videoCreatorsRouter);
+
+app.use('uploads/images', express.static(path.join('uploads', 'images')));
+app.use((error, req, res, next) => {
+  if (req.file) {
+    fs.unlink(req.file.path, (err) => {
+      console.log(err);
+    });
+  }
+  if (res.headerSent) {
+    return next(error);
+  }
+  res.status(error.code || 500);
+  res.json({ message: error.message || "An unknown error occurred!" });
+});
 
 const port = process.env.PORT || 3200;
 app.listen(port, () => {

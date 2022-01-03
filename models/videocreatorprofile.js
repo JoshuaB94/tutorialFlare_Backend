@@ -13,7 +13,8 @@ const videoCreatorProfileSchema = new mongoose.Schema({
         Youtube: {type: String, required: false},
         Twitter: {type: String, required: false},
         emailAddress: {type: String, required: false}
-    }
+    },
+    Image: {type: String, default: ""}
 });
 
 const validateVideoCreatorProfile = (videocreatorprofile) => {
@@ -25,7 +26,8 @@ const validateVideoCreatorProfile = (videocreatorprofile) => {
         skillThree: Joi.string().min(0).max(1500).required(),
         Youtube: Joi.string().required(),
         Twitter: Joi.string().required(),
-        emailAddress: Joi.string().required()
+        emailAddress: Joi.string().required(),
+        Image: Joi.string()
     });
     return schema.validate(videocreatorprofile);
 };
