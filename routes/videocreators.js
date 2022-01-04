@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 const bcrypt = require("bcryptjs");
 const express = require("express");
+const res = require("express/lib/response");
 const router = express.Router();
 
 //* POST register a new video creator
@@ -140,6 +141,31 @@ router.post("/profile-setup", async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
+
+// //* PUT a Video Creator Profile by Id
+// router.put("/profile-update/:_id",[auth], fileUpload.single("image"), async (req, res) => {
+//   if (req.body._id === req.params._id || req.body.isAdmin) {
+//     if (req.body.password) {
+//       try {
+//         const salt = await bcrypt.genSalt(10);
+//         req.body.password = await bcrypt.hash(req.body.password, salt);
+//       } catch (err) {
+//         return res.status(500).json(err);
+//       }
+//     }
+//     try {
+//       const videocreatorprofile = await VideoCreatorProfile.findByIdAndUpdate(req.params._id, {
+//         $set: req.body,
+//       });
+//       res.status(200).json("Account has been updated");
+//     } catch (err) {
+//       return res.status(500).json(err);
+//     }
+//   } else {
+//     return res.status(403).json("You can update only your account!");
+//   }
+// });
+
 
 //* GET all video creator profiles
 router.get("/profile", async (req, res) => {
