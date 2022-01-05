@@ -24,7 +24,7 @@ router.post("/register", fileUpload.single("image"), async (req, res) => {
       name: req.body.name,
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, salt),
-      isAdmin: req.body.isAdmin,
+      isCreator: req.body.isCreator,
       image: req.file.path
     });
 
@@ -37,7 +37,7 @@ router.post("/register", fileUpload.single("image"), async (req, res) => {
         _id: videocreator._id,
         name: videocreator.name,
         email: videocreator.email,
-        isAdmin: videocreator.isAdmin,
+        isCreator: videocreator.isCreator,
         image: videocreator.image
       });
   } catch (ex) {
@@ -96,12 +96,14 @@ router.delete("/:_id", async (req, res) => {
 });
 
 //* POST setup a new video creator profile
-router.post("/profile-setup", async (req, res) => {
+router.post("/:_id/profile-setup", async (req, res) => {
   try {
     const { error } = validateVideoCreatorProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let videocreatorprofile = await VideoCreatorProfile.findOne({ Name: req.body.Name });
+    const videocreator = await videoCreator.findById(req.params._id);
+
+    let videocreatorprofile = await VideoCreatorProfile.findOne({ _id: req.body.id });
     if (videocreatorprofile)
       return res.status(400).send(`Video Creator Profile Already Exists`);
 
@@ -122,37 +124,20 @@ router.post("/profile-setup", async (req, res) => {
     });
 
     await videocreatorprofile.save();
-    return res.send({
-      Name: videocreatorprofile.Name,
-      Location: videocreatorprofile.Location,
-      Skills: {
-        skillOne: videocreatorprofile.skillOne,
-        skillTwo: videocreatorprofile.skillTwo,
-        skillThree: videocreatorprofile.skillThree
-      },
-      SocialLinks: {
-        Youtube: videocreatorprofile.Youtube,
-        Twitter: videocreatorprofile.Twitter,
-        emailAddress: videocreatorprofile.emailAddress
-      },
-      Image: req.body.Image
-    });
+
+    videocreator.vcProfileId = videocreatorprofile._id 
+    await videocreator.save();
+    
+    return res.send([videocreator, videocreatorprofile]);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
 
 // //* PUT a Video Creator Profile by Id
-// router.put("/profile-update/:_id",[auth], fileUpload.single("image"), async (req, res) => {
-//   if (req.body._id === req.params._id || req.body.isAdmin) {
-//     if (req.body.password) {
-//       try {
-//         const salt = await bcrypt.genSalt(10);
-//         req.body.password = await bcrypt.hash(req.body.password, salt);
-//       } catch (err) {
-//         return res.status(500).json(err);
-//       }
-//     }
+// router.put("/:_id/profile-update",[fileUpload.single("image"), auth], async (req, res) => {
+//   const videocreatorprofile = await VideoCreatorProfile.findById(req.params._id);
+//   if (req.body.isCreator) {
 //     try {
 //       const videocreatorprofile = await VideoCreatorProfile.findByIdAndUpdate(req.params._id, {
 //         $set: req.body,
@@ -178,7 +163,7 @@ router.get("/profile", async (req, res) => {
 });
 
 //* Get a video creator profile by id
-router.get("/profile/:_id", async (req, res) => {
+router.get("/:_id/profile", async (req, res) => {
   try {
     const videocreatorprofile = await VideoCreatorProfile.findById(req.params._id);
     return res.send(videocreatorprofile);
