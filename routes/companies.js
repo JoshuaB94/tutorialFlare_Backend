@@ -135,7 +135,7 @@ router.get("/profile", async (req, res) => {
 });
 
 //* GET a company by id
-router.get("/profile/:_id", async (req, res) => {
+router.get("/:_id/profile", async (req, res) => {
   try {
     const companyprofile = await CompanyProfile.findById(req.params._id);
     return res.send(companyprofile);
