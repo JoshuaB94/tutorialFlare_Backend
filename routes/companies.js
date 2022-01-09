@@ -1,5 +1,6 @@
 const { Company, validateLogin, validateCompany } = require("../models/company");
 const { CompanyProfile, validateCompanyProfile } = require("../models/companyprofile");
+const fileUpload = require("../middleware/file-upload");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
@@ -8,7 +9,7 @@ const express = require("express");
 const router = express.Router();
 
 //* POST register a new company
-router.post("/register", async (req, res) => {
+router.post("/register", fileUpload.single("image"), async (req, res) => {
   try {
     const { error } = validateCompany(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -22,7 +23,8 @@ router.post("/register", async (req, res) => {
       company: req.body.company,
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, salt),
-      isAdmin: req.body.isAdmin,
+      isCompany: req.body.isCompany,
+      // image: req.file.path
     });
 
     await company.save();
@@ -32,9 +34,10 @@ router.post("/register", async (req, res) => {
       .header("access-control-expose-headers", "x-auth-token")
       .send({
         _id: company._id,
-        company: company.name,
+        company: company.company,
         email: company.email,
-        isAdmin: company.isAdmin,
+        isCompany: company.isCompany,
+        image: company.image
       });
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
@@ -91,12 +94,14 @@ router.delete("/:_id", async (req, res) => {
 });
 
 //* POST setup a new company profile
-router.post("/profile-setup", async (req, res) => {
+router.post("/:_id/profile-setup", async (req, res) => {
   try {
     const { error } = validateCompanyProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let companyprofile = await CompanyProfile.findOne({ CompanyName: req.body.CompanyName });
+    const company = await Company.findById(req.params._id);
+
+    let companyprofile = await CompanyProfile.findOne({ _id: req.body.id });
     if (companyprofile)
       return res.status(400).send(`Company Profile Already Exists`);
 
@@ -104,16 +109,16 @@ router.post("/profile-setup", async (req, res) => {
       CompanyName: req.body.CompanyName,
       Mission: req.body.Mission,
       Bio: req.body.Bio,
-      Website: req.body.Website
+      Website: req.body.Website,
+      // Image: req.body.Image
     });
 
     await companyprofile.save();
-    return res.send({
-      CompanyName: companyprofile.CompanyName,
-      Mission: companyprofile.Mission,
-      Bio: companyprofile.Bio,
-      Website: companyprofile.Website
-    });
+
+    company.companyProfileId = companyprofile._id
+    await company.save();
+
+    return res.send([company, companyprofile]);
   } catch (ex) {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }

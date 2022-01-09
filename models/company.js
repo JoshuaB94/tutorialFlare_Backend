@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
 const config = require("config");
-const {companyProfileSchema} = require("./companyprofile");
 
 const companySchema = mongoose.Schema({
   company: { type: String, required: true, minLength: 5, maxLength: 50 },
@@ -14,7 +13,9 @@ const companySchema = mongoose.Schema({
     maxLength: 255,
   },
   password: { type: String, required: true, minLength: 8, maxLength: 2046 },
-  isAdmin: { type: Boolean, required: true }
+  isCompany: { type: Boolean, required: true },
+  image: { type: String, default: "" },
+  companyProfileId: { type: mongoose.Types.ObjectId }
 });
 
 companySchema.methods.generateAuthToken = function () {
@@ -23,7 +24,9 @@ companySchema.methods.generateAuthToken = function () {
       _id: this._id,
       company: this.company,
       email: this.email,
-      isAdmin: this.isAdmin,
+      isCompany: this.isCompany,
+      image: this.image,
+      companyProfileId: this.companyProfileId
     },
     config.get("JWT_SECRET")
   );
@@ -34,7 +37,9 @@ const validateCompany = (company) => {
     company: Joi.string().min(5).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(8).max(2046).required(),
-    isAdmin: Joi.bool().required(),
+    isCompany: Joi.bool().required(),
+    image: Joi.string(),
+    companyProfileId: Joi.string()
   });
   return schema.validate(company);
 };

@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-const companyProfileSchema = new mongoose.Schema(
-    {
+const companyProfileSchema = new mongoose.Schema({
         CompanyName: {type: String, required: true, minLength: 0, maxLength: 250},
         Mission: {type: String, required: true, minLength: 0, maxLength: 1500},
         Bio: {type: String, required: true, minLength: 0, maxLength: 1500},
-        Website: {type: String, required: false}
+        Website: {type: String, required: false},
+        Image: {type: String, default: ""}
     });
 
 const validateCompanyProfile = (companyprofile) => {
@@ -14,7 +14,8 @@ const validateCompanyProfile = (companyprofile) => {
         CompanyName: Joi.string().min(0).max(250).required(),
         Mission: Joi.string().min(0).max(1500).required(),
         Bio: Joi.string().min(0).max(1500).required(),
-        Website: Joi.string().required()
+        Website: Joi.string().required(),
+        Image: Joi.string()
     });
     return schema.validate(companyprofile);
 };
