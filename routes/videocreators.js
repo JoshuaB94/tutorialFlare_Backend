@@ -1,5 +1,6 @@
 const { videoCreator, validateLogin, validateVideoCreator } = require("../models/videocreator");
 const { validateVideoCreatorProfile, VideoCreatorProfile }  = require("../models/videocreatorprofile");
+const { VideoUpload, validateVideoUpload } = require("../models/videouploads");
 const fileUpload = require("../middleware/file-upload");
 const videoUpload = require("../middleware/video-upload");
 
@@ -173,14 +174,32 @@ router.get("/:_id/profile", async (req, res) => {
   }
 });
 
-// //* POST a Video Upload
-// router.post("/upload", videoUpload.single("video"), async (req, res) => {
-//   try {
-//     const videoupload = req.file.path;
-//     return res.send(videoupload);
-//   } catch (ex) {
-//     return res.status(500).send(`Internal Server Error: ${ex}`);
-//   }
-// });
+//* POST a Video Upload
+router.post("/:_id/upload", videoUpload.single("video"), async (req, res) => {
+  try {
+    const { error } = validateVideoUpload(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    const videocreator = await videoCreator.findById(req.params._id);
+
+    let videoupload = await VideoUpload.findOne({ _id: req.body.id });
+    if (videoupload)
+      return res.status(400).send(`Video File Already Exists`);
+
+    videoupload = new VideoUpload({
+      title: req.body.title,
+      video: req.file.path
+    });
+
+    await videoupload.save();
+
+    videocreator.vcVideoUploads = videoupload._id 
+    await videocreator.save();
+    
+    return res.send([videocreator, videoupload]);
+  } catch (ex) {
+    return res.status(500).send(`Internal Server Error: ${ex}`);
+  }
+});
 
 module.exports = router;

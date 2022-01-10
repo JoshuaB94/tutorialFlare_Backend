@@ -15,8 +15,10 @@ const videoCreatorSchema = mongoose.Schema({
   password: { type: String, required: true, minLength: 8, maxLength: 2046 },
   isCreator: { type: Boolean, required: true },
   image: { type: String, default: ""},
-  vcProfileId: { type: mongoose.Types.ObjectId }
+  vcProfileId: { type: mongoose.Types.ObjectId },
+  vcVideoUploads: { type: mongoose.Types.ObjectId }
 });
+
 
 videoCreatorSchema.methods.generateAuthToken = function () {
   return jwt.sign(
@@ -26,7 +28,8 @@ videoCreatorSchema.methods.generateAuthToken = function () {
       email: this.email,
       isCreator: this.isCreator,
       image: this.image,
-      vcProfileId: this.vcProfileId
+      vcProfileId: this.vcProfileId,
+      vcVideoUploads: this.vcVideoUploads
     },
     config.get("JWT_SECRET")
   );
@@ -39,7 +42,8 @@ const validateVideoCreator = (videocreator) => {
     password: Joi.string().min(8).max(2046).required(),
     isCreator: Joi.bool().required(),
     image: Joi.string(),
-    vcProfileId: Joi.string()
+    vcProfileId: Joi.string(),
+    vcVideoUploads: Joi.string()
   });
   return schema.validate(videocreator);
 };
