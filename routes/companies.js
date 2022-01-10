@@ -110,7 +110,7 @@ router.post("/:_id/profile-setup", fileUpload.single("image"), async (req, res) 
       Mission: req.body.Mission,
       Bio: req.body.Bio,
       Website: req.body.Website,
-      Image: req.body.Image
+      Image: req.file.path
     });
 
     await companyprofile.save();

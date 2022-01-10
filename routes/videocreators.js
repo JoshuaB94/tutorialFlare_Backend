@@ -1,6 +1,7 @@
 const { videoCreator, validateLogin, validateVideoCreator } = require("../models/videocreator");
 const { validateVideoCreatorProfile, VideoCreatorProfile }  = require("../models/videocreatorprofile");
 const fileUpload = require("../middleware/file-upload");
+const videoUpload = require("../middleware/video-upload");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
@@ -96,7 +97,7 @@ router.delete("/:_id", async (req, res) => {
 });
 
 //* POST setup a new video creator profile
-router.post("/:_id/profile-setup",fileUpload.single("image"), async (req, res) => {
+router.post("/:_id/profile-setup",fileUpload.single("Image"), async (req, res) => {
   try {
     const { error } = validateVideoCreatorProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -120,7 +121,7 @@ router.post("/:_id/profile-setup",fileUpload.single("image"), async (req, res) =
         Twitter: req.body.Twitter,
         emailAddress: req.body.emailAddress
       },
-      Image: req.body.Image
+      Image: req.file.path
     });
 
     await videocreatorprofile.save();
@@ -171,5 +172,15 @@ router.get("/:_id/profile", async (req, res) => {
     return res.status(500).send(`Internal Server Error: ${ex}`);
   }
 });
+
+// //* POST a Video Upload
+// router.post("/upload", videoUpload.single("video"), async (req, res) => {
+//   try {
+//     const videoupload = req.file.path;
+//     return res.send(videoupload);
+//   } catch (ex) {
+//     return res.status(500).send(`Internal Server Error: ${ex}`);
+//   }
+// });
 
 module.exports = router;

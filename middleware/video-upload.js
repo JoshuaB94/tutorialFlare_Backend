@@ -6,7 +6,7 @@ const MIME_TYPE_MAP = {
     "video/quicktime": "mov"
 };
 
-const fileUpload = multer({
+const videoUpload = multer({
     limits: 500000,
     storage: multer.diskStorage({
         destination: (req, file, cb) => {
@@ -24,4 +24,4 @@ const fileUpload = multer({
     }
 });
 
-module.exports = fileUpload;
+module.exports = videoUpload;
