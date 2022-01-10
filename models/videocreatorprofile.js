@@ -3,7 +3,7 @@ const Joi = require("joi");
 
 const videoCreatorProfileSchema = new mongoose.Schema({
     Name: {type: String, required: true, minLength: 0, maxLength: 50},
-    Location: {type: String, required: false, minLength: 0, maxLength: 250},
+    Location: {type: String, required: true, minLength: 0, maxLength: 250},
     Skills: {
        skillOne: {type: String, required: true, minLength: 0, maxLength: 1500},
        skillTwo: {type: String, required: true, minLength: 0, maxLength: 1500},

@@ -96,7 +96,7 @@ router.delete("/:_id", async (req, res) => {
 });
 
 //* POST setup a new video creator profile
-router.post("/:_id/profile-setup", async (req, res) => {
+router.post("/:_id/profile-setup",fileUpload.single("image"), async (req, res) => {
   try {
     const { error } = validateVideoCreatorProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);

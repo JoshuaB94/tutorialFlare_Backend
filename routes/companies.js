@@ -24,7 +24,7 @@ router.post("/register", fileUpload.single("image"), async (req, res) => {
       email: req.body.email,
       password: await bcrypt.hash(req.body.password, salt),
       isCompany: req.body.isCompany,
-      // image: req.file.path
+      image: req.file.path
     });
 
     await company.save();
@@ -94,7 +94,7 @@ router.delete("/:_id", async (req, res) => {
 });
 
 //* POST setup a new company profile
-router.post("/:_id/profile-setup", async (req, res) => {
+router.post("/:_id/profile-setup", fileUpload.single("image"), async (req, res) => {
   try {
     const { error } = validateCompanyProfile(req.body);
     if (error) return res.status(400).send(error.details[0].message);
@@ -110,7 +110,7 @@ router.post("/:_id/profile-setup", async (req, res) => {
       Mission: req.body.Mission,
       Bio: req.body.Bio,
       Website: req.body.Website,
-      // Image: req.body.Image
+      Image: req.body.Image
     });
 
     await companyprofile.save();
