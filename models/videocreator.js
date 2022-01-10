@@ -16,7 +16,7 @@ const videoCreatorSchema = mongoose.Schema({
   isCreator: { type: Boolean, required: true },
   image: { type: String, default: ""},
   vcProfileId: { type: mongoose.Types.ObjectId },
-  vcVideoUploads: { type: mongoose.Types.ObjectId }
+  vcVideoUploads: [{ type: mongoose.Types.ObjectId }]
 });
 
 
